@@ -3,6 +3,7 @@
 
 import cmd
 import sys
+import shlex
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -116,16 +117,64 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        kwarg = {}
+
+        args = args.split()
+        cls_name = args[0]
+        if len(args) > 0:
+            params = args[1:]
+            for param in params:
+                if '=' not in param:
+                    continue
+                param = param.split('=')
+                key = param[0]
+                value = self.string_parser(param[1])
+                if value is not None:
+                    kwarg[key] = value
+
+        if cls_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        new_instance = eval(cls_name)(**kwarg)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
+
+    def string_parser(self, param):
+        """Handles the params and check if its valid"""
+        if '"' not in param:
+            if param.isdigit():
+                value = int(param)
+            elif self.isfloat(param):
+                value = float(param)
+            else:
+                value = None
+        else:
+            try:
+                param.replace('\"', '')
+                param = shlex.split(param)[0]
+            except ValueError:
+                return None
+
+            if param.isdigit() or self.isfloat(param):
+                value = param
+            else:
+                if '_' in param:
+                    param = param.replace('_', ' ')
+                value = param
+        return value
+
+    def isfloat(self, param):
+        """Checks if a param can be converted to a float"""
+        try:
+            float(param)
+            return True
+        except ValueError:
+            return False
 
     def help_create(self):
         """ Help information for the create method """

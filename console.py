@@ -121,28 +121,30 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        kwarg = {}
 
         args = args.split()
         cls_name = args[0]
-        if len(args) > 0:
+        if cls_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
+        # create instance
+        new_instance = HBNBCommand.classes[cls_name]()
+
+        # iterate attribs
+        if len(args[1:]) > 0:
             params = args[1:]
             for param in params:
                 if '=' not in param:
                     continue
-                param = param.split('=')
-                key = param[0]
-                value = self.string_parser(param[1])
+                key, value = param.split('=')
+                value = self.string_parser(value)
                 if value is not None:
-                    kwarg[key] = value
+                    setattr(new_instance, key, value)
 
-        if cls_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = eval(cls_name)(**kwarg)
-        new_instance.save()
+        storage.save()
         print(new_instance.id)
-        new_instance.save()
+        storage.save()
 
     def string_parser(self, param):
         """Handles the params and check if its valid"""

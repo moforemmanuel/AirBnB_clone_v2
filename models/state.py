@@ -16,6 +16,7 @@ class State(BaseModel, Base):
     __tablename__ = 'states'
     if storage_type == 'db':
         name = Column(String(60), nullable=False)
+        # id = Column(String(60), primary_key=True, nullable=False)
         # children = relationship("City")
         cities = relationship("City", backref="state", cascade="all, delete-orphan")
     else:
@@ -28,7 +29,7 @@ class State(BaseModel, Base):
                 equals current state.id
              """
             list_cities = []
-            all_cities = models.storage.all(City);
+            all_cities = models.storage.all(City)
             for key, city_obj in all_cities.items():
                 if city_obj.state_id == self.id:
                     list_cities.append(city_obj)

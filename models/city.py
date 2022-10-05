@@ -4,6 +4,10 @@ from models.base_model import BaseModel, Base
 from models.state import State
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+from os import getenv
+
+
+storage_type = getenv("HBNB_TYPE_STORAGE")
 
 
 class City(BaseModel, Base):
@@ -12,10 +16,15 @@ class City(BaseModel, Base):
     # name = ""
     __tablename__ = 'cities'
 
-    name = Column(String(128), nullable=False)
-    state_id = Column(
-        String(60),
-        ForeignKey('states.id'),
-        nullable=False
-    )
-    states = relationship('State', backref='states')
+    if storage_type == 'db':
+        name = Column(String(128), nullable=False)
+        state_id = Column(
+            String(60),
+            ForeignKey('states.id'),
+            nullable=False
+        )
+        # states = relationship('State', backref='states')
+
+    else:
+        name = ""
+        state_id = ""

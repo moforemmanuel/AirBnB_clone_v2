@@ -16,6 +16,7 @@ user = getenv("HBNB_MYSQL_USER")
 host = getenv("HBNB_MYSQL_HOST")
 password = getenv("HBNB_MYSQL_PWD")
 hbnb_env = getenv("HBNB_ENV")
+socket = '?unix_socket=/opt/lampp/var/mysql/mysql.sock'
 
 
 classes = {"State": State, "City": City, "User": User,
@@ -39,27 +40,35 @@ class DBStorage:
         """
         retrieve all instances of cls
         """
+        # print('listing')
+        # print(cls)
         cls_objs = {}
-        if cls:
-            if isinstance(cls, str) and cls in classes:
-                for obj in self.__session.query(classes[cls]).all():
-                    key = f"{obj.__class__.__name__}.{obj.id}"
-                    value = obj
-                    cls_objs[key] = value
+        # print(cls is None)
 
-            elif cls.__name__ in classes:
-                for obj in self.__session.query(cls).all():
-                    key = str(obj.__class__.__name__) + "." + str(obj.id)
+        if not cls:
+            # print('no cls is present')
+            for class_class in [State, City]:
+                for obj in self.__session.query(class_class).all():
+                    key = f"{class_class.__name__}.{obj.id}"
                     val = obj
                     cls_objs[key] = val
+            # print('result-no-cls: ', cls_objs, end='\n\n')
 
-            else:
-                for name, _class in classes.items():
-                    for obj in self.__session.query(_class).all():
-                        key = f"{_class.__name__}.{obj.id}"
-                        val = obj
-                        cls_objs[key] = val
-            return cls_objs
+        else:
+            # print('cls present: ', cls)
+            # cls_dict = {}
+            # keys = self.__objects.keys()
+            if type(cls) is not str:
+                cls = cls.__name__
+            for obj in self.__session.query(classes[cls]).all():
+                # print('objet: ', obj)
+                key = f"{obj.__class__.__name__}.{obj.id}"
+                value = obj
+                cls_objs[key] = value
+
+            # print('result-cls:', cls_objs, end='\n\n')
+
+        return cls_objs
 
     def new(self, obj):
         """

@@ -8,6 +8,7 @@ from sqlalchemy import Column, String, DateTime
 import models
 
 Base = declarative_base()
+date_format = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 class BaseModel:
@@ -23,7 +24,6 @@ class BaseModel:
         id = str(uuid.uuid4())
         created_at = datetime.now()
         updated_at = datetime.now()
-        str_time = "%Y-%m-%dT%H:%M:%S.%f"
         if not kwargs:
             from models import storage
             self.id = id
@@ -31,22 +31,39 @@ class BaseModel:
             self.updated_at = updated_at
             # storage.new(self)
 
-        elif kwargs:
-            for key, value in kwargs.items():
-                setattr(self, key, value)
+
+        # else:
+        #     try:
+        #         kwargs['updated_at'] = datetime.fromisoformat(
+        #                                 kwargs['updated_at'])
+        #         kwargs['created_at'] = datetime.fromisoformat(
+        #                                 kwargs['created_at'])
+        #         self.__dict__.update(kwargs)
+        #     except KeyError:
+        #         self.id = str(uuid.uuid4())
+        #         kwargs['created_at'] = datetime.now()
+        #         kwargs['updated_at'] = datetime.now()
+        #         self.__dict__.update(kwargs)
 
         else:
-            try:
-                kwargs['updated_at'] = datetime.fromisoformat(
-                                        kwargs['updated_at'])
-                kwargs['created_at'] = datetime.fromisoformat(
-                                        kwargs['created_at'])
-                self.__dict__.update(kwargs)
-            except KeyError:
+            # assign dict of attribs to inst
+            if kwargs.get('created_at'):
+                kwargs['created_at'] = datetime.fromisoformat(kwargs['created_at'])
+                # or use datetime.strptime(kwargs['created_at'], date_formate)
+            else:
+                kwargs['created_at'] = datetime.utcnow() # assign current time
+
+            if kwargs.get('updated_at'):
+                kwargs['updated_at'] = datetime.fromisoformat(kwargs['updated_at'])
+            else:
+                kwargs['updated_at'] = datetime.utcnow() # assign current time
+
+            if not kwargs.get('id'):
                 self.id = str(uuid.uuid4())
-                kwargs['created_at'] = datetime.now()
-                kwargs['updated_at'] = datetime.now()
-                self.__dict__.update(kwargs)
+
+            for key, value in kwargs.items():
+                if "__class__" not in key:
+                    setattr(self, key, value)
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -57,8 +74,11 @@ class BaseModel:
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
+        # print('creating')
         models.storage.new(self)
+        # print('saving')
         models.storage.save()
+        # print('commited')
 
     def to_dict(self):
         """Convert instance into dict format"""

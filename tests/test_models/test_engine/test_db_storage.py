@@ -52,6 +52,16 @@ class TestDBStorage(unittest.TestCase):
         if amen.id in models.storage.all(Amenity):
             self.assertTrue(amen.name, 'Bar')
 
+    def test_review(self):
+        """ test review """
+        review = Review(text='Bamenda is love')
+        if review.id in models.storage.all(Review):
+            self.assertTrue(review.name, 'Bamenda is love')
+
+    def tearDown(self) -> None:
+        self.session.close()
+        self.session.rollback()
+
 
 if __name__ == '__main__':
     unittest.main()

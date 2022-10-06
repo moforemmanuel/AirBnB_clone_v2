@@ -128,10 +128,36 @@ class TestConsole(unittest.TestCase):
         out = self.capt_out.getvalue()
         self.assertEqual("** no instance found **\n", out)
 
+    def test_create_file_storage(self):
+        """
+        test for create instance
+        """
+        console = self.create()
+        console.onecmd("create User")
+        user_id = self.capt_out.getvalue()
+        self.assertTrue(isinstance(user_id, str))
 
+    def test_create_class_missing(self):
+        """
+        test for create instance with missing class
+        """
+        console = self.create()
+        console.onecmd("create")
+        out = self.capt_out.getvalue()
+        self.assertEqual('** class name missing **\n', out)
+
+    def test_create_class_not_exist(self):
+        """
+        test for create instance with invalid class
+        """
+        console = self.create()
+        console.onecmd("create Manuel")
+        out = self.capt_out.getvalue()
+        self.assertEqual("** class doesn't exist **\n", out)
 
 # with patch('sys.stdout', new=StringIO()) as f:
 #     HBNBCommand.onecmd("help show")
+
 
 if __name__ == '__main__':
     unittest.main()

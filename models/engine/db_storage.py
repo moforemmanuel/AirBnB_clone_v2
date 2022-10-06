@@ -47,7 +47,7 @@ class DBStorage:
 
         if not cls:
             # print('no cls is present')
-            for class_class in [State, City, User, Place, Review]:
+            for class_class in classes.values():
                 for obj in self.__session.query(class_class).all():
                     key = f"{class_class.__name__}.{obj.id}"
                     val = obj

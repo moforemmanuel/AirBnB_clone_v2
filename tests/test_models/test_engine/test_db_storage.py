@@ -53,7 +53,5 @@ class TestDBStorage(unittest.TestCase):
             self.assertTrue(amen.name, 'Bar')
 
 
-
-
 if __name__ == '__main__':
     unittest.main()

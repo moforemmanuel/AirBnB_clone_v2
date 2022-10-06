@@ -25,6 +25,13 @@ class TestConsole(unittest.TestCase):
         """
         sys.stdout = self.backup
 
+    def create(self):
+        """
+        create an instance of HBNBCommand class
+        """
+        return HBNBCommand()
+
+    def test_quit
 
 if __name__ == '__main__':
     unittest.main()

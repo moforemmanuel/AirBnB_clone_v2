@@ -24,8 +24,14 @@ class TestDBStorage(unittest.TestCase):
     def test_state(self):
         """ test state """
         state = State(name=" NW")
-        if state.id in models.storage.all():
+        if state.id in models.storage.all(State):
             self.assertTrue(state.name, 'NW')
+
+    def test_city(self):
+        """ test city """
+        city = City(name='Bamenda')
+        if city.id in models.storage.all(City):
+            self.assertTrue(city.name, 'Bamenda')
 
 if __name__ == '__main__':
     unittest.main()

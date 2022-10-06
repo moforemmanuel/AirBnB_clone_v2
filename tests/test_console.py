@@ -1,15 +1,29 @@
 import unittest
 """ Module for testing console"""
 from console import HBNBCommand
-# from uuid import uuid4
+import os
+import sys
+import models
+import unittest
+from io import StringIO
+from unittest.mock import create_autospec
 
 
-class MyTestCase(unittest.TestCase):
+class TestConsole(unittest.TestCase):
     """ Class to test the console """
-    def test_do_create_with_args(self):
-        """ create a model """
-        base_id = HBNBCommand.do_create(HBNBCommand.do_create, "BaseModel")
-        self.assertEqual(base_id, None)  # add assertion here
+    def setUp(self):
+        """
+        set up
+        """
+        self.backup = sys.stdout
+        self.capt_out = StringIO()
+        sys.stdout = self.capt_out
+
+    def tearDown(self):
+        """
+        tear down
+        """
+        sys.stdout = self.backup
 
 
 if __name__ == '__main__':

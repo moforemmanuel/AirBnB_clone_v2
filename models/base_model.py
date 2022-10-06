@@ -24,39 +24,20 @@ class BaseModel:
         id = str(uuid.uuid4())
         created_at = datetime.now()
         updated_at = datetime.now()
-        if not kwargs:
-            from models import storage
-            self.id = id
-            self.created_at = created_at
-            self.updated_at = updated_at
-            # storage.new(self)
-
-
-        # else:
-        #     try:
-        #         kwargs['updated_at'] = datetime.fromisoformat(
-        #                                 kwargs['updated_at'])
-        #         kwargs['created_at'] = datetime.fromisoformat(
-        #                                 kwargs['created_at'])
-        #         self.__dict__.update(kwargs)
-        #     except KeyError:
-        #         self.id = str(uuid.uuid4())
-        #         kwargs['created_at'] = datetime.now()
-        #         kwargs['updated_at'] = datetime.now()
-        #         self.__dict__.update(kwargs)
-
-        else:
+        if kwargs:
             # assign dict of attribs to inst
             if kwargs.get('created_at'):
-                kwargs['created_at'] = datetime.fromisoformat(kwargs['created_at'])
+                kwargs['created_at'] = datetime.fromisoformat(
+                    kwargs['created_at'])
                 # or use datetime.strptime(kwargs['created_at'], date_formate)
             else:
-                kwargs['created_at'] = datetime.utcnow() # assign current time
+                kwargs['created_at'] = datetime.utcnow()  # assign current time
 
             if kwargs.get('updated_at'):
-                kwargs['updated_at'] = datetime.fromisoformat(kwargs['updated_at'])
+                kwargs['updated_at'] = datetime.fromisoformat(
+                    kwargs['updated_at'])
             else:
-                kwargs['updated_at'] = datetime.utcnow() # assign current time
+                kwargs['updated_at'] = datetime.utcnow()  # assign current time
 
             if not kwargs.get('id'):
                 self.id = str(uuid.uuid4())
@@ -64,6 +45,13 @@ class BaseModel:
             for key, value in kwargs.items():
                 if "__class__" not in key:
                     setattr(self, key, value)
+
+        else:
+            from models import storage
+            self.id = id
+            self.created_at = created_at
+            self.updated_at = updated_at
+            # storage.new(self)
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -96,4 +84,3 @@ class BaseModel:
     def delete(self):
         """ Delete current instance from storage """
         models.storage.delete(self)
-

@@ -46,6 +46,12 @@ class TestDBStorage(unittest.TestCase):
         if user.id in models.storage.all(User):
             self.assertTrue(user.name, 'Mofor')
 
+    def test_amenity(self):
+        """ test amenity """
+        amen = Amenity(name='Bar')
+        if amen.id in models.storage.all(Amenity):
+            self.assertTrue(amen.name, 'Bar')
+
 
 
 

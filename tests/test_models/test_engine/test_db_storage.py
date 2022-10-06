@@ -33,5 +33,15 @@ class TestDBStorage(unittest.TestCase):
         if city.id in models.storage.all(City):
             self.assertTrue(city.name, 'Bamenda')
 
+    def test_place(self):
+        """ test city """
+        place = Place(name='Nkwen', number_rooms=500)
+        if place.id in models.storage.all(Place):
+            self.assertTrue(place.name, 'Nkwen')
+            self.assertTrue(place.number_rooms, 500)
+
+
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -34,11 +34,17 @@ class TestDBStorage(unittest.TestCase):
             self.assertTrue(city.name, 'Bamenda')
 
     def test_place(self):
-        """ test city """
+        """ test place """
         place = Place(name='Nkwen', number_rooms=500)
         if place.id in models.storage.all(Place):
             self.assertTrue(place.name, 'Nkwen')
             self.assertTrue(place.number_rooms, 500)
+
+    def test_user(self):
+        """ test user """
+        user = User(name='Mofor')
+        if user.id in models.storage.all(User):
+            self.assertTrue(user.name, 'Mofor')
 
 
 

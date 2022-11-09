@@ -1,21 +1,16 @@
 #!/usr/bin/python3
 """
-Distributes archived pack to both web servers
+extract a .tgz archive from the contents of the web_static folder
 Usage:
-    fab -f 2-do_deploy_web_static.py do_deploy:
-    archive_path=versions/<file_name> -i my_ssh_private_key
-
-Example:
-    fab -f 2-do_deploy_web_static.py do_deploy:
-    archive_path=versions/web_static_20170315003959.tgz -i my_ssh_private_key
+    fab -f 2-deploy_web_static.py do_deploy -i <identity-file>
 """
-
-import os.path
+from fabric.api import local, put, run, env
 from datetime import datetime
-from fabric.api import env, put, run, local
+import os
 
+
+env.hosts = ["3.233.229.162", "44.197.235.170"]
 env.user = "ubuntu"
-env.hosts = ["34.75.10.160", "35.231.86.187"]
 
 
 def do_pack():
@@ -34,8 +29,8 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    """Distributes an archive to a web server.
-       Returns True if successful and false if not
+    """Extract .tgz archive from the contents of /web_static
+       returns True if successful and False if not
     """
     if not os.path.exists(archive_path):
         return False

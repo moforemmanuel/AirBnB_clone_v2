@@ -49,7 +49,7 @@ def do_deploy(archive_path):
 
         # decompress
         run("mkdir -p /data/web_static/releases/{}/".format(tar_no_ext))
-        run("tar -xzf /tmp/{} -C /data/web_static/releases/{tar_no_ext}".formar(tarball))
+        run("tar -xzf /tmp/{} -C /data/web_static/releases/{}".formar(tarball, tar_no_ext))
 
         # delete archive
         run("rm /tmp/{}".format(tarball))

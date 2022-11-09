@@ -6,9 +6,9 @@ from fabric.api import run, local
 
 
 def do_pack():
-    """Gen tarball from web_static
-    Return path if successfull, else None
     """
+    Gen tarball from web_static
+    Return path if successfull, else None"""
 
     suffix = datetime.now().strftime("%Y%m%d%H%M%S")
     filePath = f"versions/web_static_{suffix}.tgz"

@@ -3,7 +3,7 @@
 
 # install nginx
 sudo apt update
-sudo apt install nginx
+sudo apt install -y nginx
 
 # create dirs, check if exist
 mkdir -p /data/

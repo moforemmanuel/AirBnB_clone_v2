@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """
-generates a .tgz archive from the contents of the web_static folder
+extract a .tgz archive from the contents of the web_static folder
 Usage:
-    fab -f 1-pack_web_static.py do_pack
+    fab -f 2-deploy_web_static.py do_deploy -i <identity-file>
 """
 from fabric.api import local, put, run, env
 from datetime import datetime
@@ -29,9 +29,6 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    """Extract .tgz archive from the contents of /web_static
-       returns True if successful and False if not
-    """
     if not os.path.exists(archive_path):
         return False
 

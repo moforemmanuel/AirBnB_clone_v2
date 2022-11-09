@@ -11,7 +11,8 @@ Example:
 """
 
 import os.path
-from fabric.api import env, put, run
+from datetime import datetime
+from fabric.api import env, put, run, local
 
 env.hosts = ["3.233.229.162", "44.197.235.170"]
 env.user = "ubuntu"
@@ -22,13 +23,13 @@ def do_pack():
        returns archive's path if successful and None if not
     """
     now = datetime.now().strftime('%Y%m%d%H%M%S')
-    filePath = 'versions/web_static_{}.tgz'.format(now)
+    file_path = 'versions/web_static_{}.tgz'.format(now)
 
     local('mkdir -p versions/')
-    createArchive = local('tar -cvzf {} web_static/'.format(filePath))
+    tarball = local('tar -cvzf {} web_static/'.format(file_path))
 
-    if createArchive.succeeded:
-        return filePath
+    if tarball.succeeded:
+        return file_path
     return None
 
 def do_deploy(archive_path):

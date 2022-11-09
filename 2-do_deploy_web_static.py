@@ -48,21 +48,20 @@ def do_deploy(archive_path):
         put(archive_path, "/tmp/")
 
         # decompress
-        run(f"mkdir -p /data/web_static/releases/{tar_no_ext}/")
-        run(f"tar -xzf /tmp/{tarball} -C /data/web_static/releases/{tar_no_ext}")
+        run("mkdir -p /data/web_static/releases/{}/".format(tar_no_ext))
+        run("tar -xzf /tmp/{} -C /data/web_static/releases/{tar_no_ext}".formar(tarball))
 
         # delete archive
-        run(f"rm /tmp/{tarball}")
+        run("rm /tmp/{}".format(tarball))
 
         # delete symlink /data/web_static/current
-        run(f"mv /data/web_static/releases/{tar_no_ext}/web_static/* /data/web_static/releases/{tar_no_ext}/")
-        run(f"rm -rf /data/web_static/releases/{tar_no_ext}/web_static")
+        run("mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/".format(tar_no_ext, tar_no_ext))
+        run("rm -rf /data/web_static/releases/{}/web_static".format(tar_no_ext))
         run("rm -rf /data/web_static/current")
 
         # recreate symlink /data/web_static/current
         # link to /data/web_static/releases/<archive filename without extension>
-        run(
-            "ln -s /data/web_static/releases/{tar_no_ext}/ /data/web_static/current")
+        run("ln -s /data/web_static/releases/{}/ /data/web_static/current".format(tar_no_ext))
         run("echo 'New version deployed!'")
         return True
 

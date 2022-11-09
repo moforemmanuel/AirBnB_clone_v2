@@ -29,6 +29,9 @@ def do_pack():
 
 
 def do_deploy(archive_path):
+    """Extract .tgz archive from the contents of /web_static
+       returns True if successful and False if not
+    """
     if not os.path.exists(archive_path):
         return False
 

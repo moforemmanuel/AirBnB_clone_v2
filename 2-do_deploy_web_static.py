@@ -10,6 +10,7 @@ Example:
     archive_path=versions/web_static_20170315003959.tgz -i my_ssh_private_key
 """
 
+
 import os.path
 from datetime import datetime
 from fabric.api import env, put, run, local
@@ -32,6 +33,7 @@ def do_pack():
         return file_path
     return None
 
+
 def do_deploy(archive_path):
     """Distributes an archive to a web server.
        Returns True if successful and false otherwise
@@ -49,19 +51,25 @@ def do_deploy(archive_path):
 
         # decompress
         run("mkdir -p /data/web_static/releases/{}/".format(tar_no_ext))
-        run("tar -xzf /tmp/{} -C /data/web_static/releases/{}".formar(tarball, tar_no_ext))
+        run("tar -xzf /tmp/{} -C /data/web_static/releases/{}"
+            .formar(tarball, tar_no_ext))
 
         # delete archive
         run("rm /tmp/{}".format(tarball))
 
         # delete symlink /data/web_static/current
-        run("mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/".format(tar_no_ext, tar_no_ext))
-        run("rm -rf /data/web_static/releases/{}/web_static".format(tar_no_ext))
+        run(
+            "mv /data/web_static/releases/{}/web_static/* /data/web_static/\
+            releases/{}/".format(tar_no_ext, tar_no_ext))
+        run("rm -rf /data/web_static/releases/{}/web_static"
+            .format(tar_no_ext))
         run("rm -rf /data/web_static/current")
 
         # recreate symlink /data/web_static/current
-        # link to /data/web_static/releases/<archive filename without extension>
-        run("ln -s /data/web_static/releases/{}/ /data/web_static/current".format(tar_no_ext))
+        # link to /data/web_static/releases/\
+        # <archive filename without extension>
+        run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
+            .format(tar_no_ext))
         run("echo 'New version deployed!'")
         return True
 

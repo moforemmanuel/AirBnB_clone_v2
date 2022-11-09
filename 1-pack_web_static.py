@@ -2,7 +2,7 @@
 """pack files"""
 
 from datetime import datetime
-from fabric.api import run, local
+from fabric.api import local
 
 
 def do_pack():

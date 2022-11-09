@@ -6,8 +6,8 @@ from fabric.api import local
 
 
 def do_pack():
-    """Gen tarball from web_static
-    """
+    '''Gen tarball from web_static
+    '''
 
     suffix = datetime.now().strftime("%Y%m%d%H%M%S")
     filePath = f"versions/web_static_{suffix}.tgz"

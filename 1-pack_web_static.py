@@ -1,22 +1,20 @@
 #!/usr/bin/python3
 """pack files"""
 
-from datetime import datetime
 from fabric.api import local
+from datetime import datetime
 
 
 def do_pack():
-    '''Gen tarball from web_static
-    '''
-
+    """returns the archive path if the archive has been correctly generated"""
     suffix = datetime.now().strftime("%Y%m%d%H%M%S")
-    filePath = f"versions/web_static_{suffix}.tgz"
+    file_path = f"versions/web_static_{suffix}.tgz"
 
     # create versions folder
     local("mkdir -p versions/")
 
     # pack web_static
-    tarball = local(f"tar -cvzf {filePath} web_static/")
+    tarball = local(f"tar -cvzf {file_path} web_static/")
 
     if tarball.succeeded:
-        return filePath
+        return file_path
